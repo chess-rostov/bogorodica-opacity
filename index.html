@@ -1,0 +1,403 @@
+<html>
+
+<head>
+<title>Слайдер: Богородица</title>
+<meta name="keywords" content="Целительница, 
+                               Блаженное чрево, 
+                               Неупиваемая чаша, 
+                               Жировицкая, 
+                               Абульская, 
+                               Августовская,
+                               Аз есмь с Вами и никтоже на вы,
+                               Леушинская,
+                               Азовская,
+                               Икона Богородицы Акафистная Зографская (Предвозвестительница),
+                               Зографская,
+                               Предвозвестительница,
+                               Акафистная,
+                               Хиландарская"> 
+<style>
+
+body {
+    background: gray;
+    text-align: center;
+    font-size: 150%;
+    /*overflow-y: hidden;*/
+}
+
+
+div.vlevo>span,
+div.vpravo>span{
+    font-size: xx-large;
+    color: white;
+    font-weight: bold;
+    font-size: 250%;
+    position: relative;
+    top: 40%;
+    user-select: none;
+}
+
+img {
+    max-width:auto; 
+    height:94%;
+}
+
+a ~ div.vlevo{
+  width: 40%;
+  height: 100%;
+  /*background-color: green;*/
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0.3;
+  text-align: center;
+  /*vertical-align: middle;*/
+  z-index: 20;
+}
+
+@keyframes vlevo-vpravo-hover {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}
+
+a~div.vlevo:hover,
+a~div.vpravo:hover{
+    background-color: black;
+    opacity: 0.3;
+    text-align: center;
+    animation: vlevo-vpravo-hover 1s linear;
+}
+      
+a ~ div.vpravo {
+  width: 40%;
+  height: 100%;
+  /*background-color: blue;*/
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.3;
+  text-align: center;
+  /*vertical-align: middle;*/
+  z-index: 30;
+  float: right;
+}
+      
+img ~ div.center {
+  width: 20%;
+  height: 100%;
+  /*background-color: yellow;*/
+  position: absolute;
+  top: 0;
+  left: 40%;
+  opacity: 0.3;
+  clear: both;
+}
+
+#nameIcon {
+   font-size: xx-large;
+   display: block;
+}  
+
+    
+@keyframes change-opacity {
+    0% {opacity: 0; }
+    10% {opacity: 0.7; }
+    20% {opacity: 1; }
+    50% {opacity: 1; }
+    80% {opacity: 1; }
+    90% {opacity: 0.7; }
+    100% {opacity: 0; }
+}
+
+img {
+    animation: change-opacity 5s linear infinite;
+}
+  
+</style>
+<!--<script type="text/javascript" defer="" src="https://yandex.st/jquery/1.9.1/jquery.min.js"></script> -->
+<script>
+
+var isRun = true;
+var iconurl = '';
+var address_site = '';
+var img_title = '';
+var currentItem = 0;
+var timerValue = 4900;
+var flagSkrytb = false;
+var isClicked = false;
+var flagRandomPoryadok = true;
+var prevClickedItem = '';
+
+document.addEventListener('keydown', function(){
+    console.log('Success onkeydown');
+});
+document.addEventListener('keypress', function(){
+    console.log('Success onkeypress');
+});
+document.addEventListener('keyup', function(){
+    console.log('Success onkeyup');
+});
+
+document.addEventListener('keyup', function(event){
+    console.log('Key: ', event.key);
+    console.log('keyCode: ', event.keyCode);
+    if(event.key == 'ArrowLeft'){
+        funcPrev();
+    }
+    if(event.key == 'ArrowRight'){
+        funcNext();
+    }
+    if(event.key == 'ArrowDown'){
+        funcPrev();
+    }
+    if(event.key == 'ArrowUp'){
+        funcNext();
+    }
+  
+    if(event.key == '4'){
+      funcPrev();
+    }
+    if(event.key == '6'){
+      funcNext();
+    }
+    if(event.key == '2'){
+      funcPrev();
+    }
+    if(event.key == '8'){
+      funcNext();
+    }
+});
+
+var arrNumber = ["1", "5", "2", "7", "0", "4", "9", "3", "6", "8"];
+
+var stranicas = ["Целительница", 
+"Блаженное чрево", 
+"Неупиваемая чаша", 
+"Жировицкая", 
+"Абульская", 
+"Августовская", 
+"Аз есмь с вами, и никтоже на вы (Леушинская)", 
+"Азовская", 
+"Икона Богородицы Акафистная Зографская (Предвозвестительница)", 
+"Акафистная Хиландарская"];
+
+var sites = ["https://azbyka.ru/days/ikona-celitelnica", 
+"https://azbyka.ru/days/ikona-barlovskaja-blazhennoe-chrevo", 
+"https://azbyka.ru/days/ikona-neupivaemaja-chasha", 
+"https://azbyka.ru/days/ikona-zhirovickaja", 
+"https://azbyka.ru/days/ikona-abulskaja", 
+"https://azbyka.ru/days/ikona-avgustovskaja", 
+"https://azbyka.ru/days/ikona-az-esm-s-vami-i-niktozhe-na-vy-leushinskaja", 
+"https://azbyka.ru/days/ikona-azovskaja", 
+"https://azbyka.ru/days/ikona-akafistnaja-zografskaja-predvozvestitelnica", 
+"https://azbyka.ru/days/ikona-akafistnaja"];
+
+var urls = ["https://azbyka.ru/days/assets/img/icons/73/p1d5c5kmvt1ukl2osnab4cob3i3.jpg", 
+"https://azbyka.ru/days/assets/img/icons/294/p1887qlu5ju3vjedjqaplrqjf3.jpg", 
+"https://azbyka.ru/days/assets/img/icons/13/p1aiuoki6814af100jsbo1o68a8g7.png", 
+"https://azbyka.ru/days/assets/img/icons/13/dbc3642c02451a8e7e01c602ad715d27.jpg",
+"https://azbyka.ru/days/assets/img/icons/211/p1aj3p4n0njit10cst3m14nv1aee3.jpg", 
+"https://azbyka.ru/days/storage/images/icons-of-our-lady/141/p1alem8g1pf37c8h1jps1s2k1qm53.png", 
+"https://azbyka.ru/days/storage/images/icons-of-our-lady/76/p1as75dtlhoto1icaeau13qqaj4.png", 
+"https://azbyka.ru/days/storage/images/icons-of-our-lady/323/p1bcf5ev701agu1ani6s51cvg8ib.png", 
+"https://azbyka.ru/days/storage/images/icons-of-our-lady/355/p1eja6h5k7jumciv16g91nug1ipe3.jpg", 
+"https://azbyka.ru/days/storage/images/icons-of-our-lady/32/p1avbclh6bve21519vqafio10la3.png"];
+
+function change(in_currentItem){
+    currentItem = in_currentItem;
+    if(flagRandomPoryadok){
+        //currentItem = getRandomInt(urls.length - 1);
+        currentItem = arrNumber[currentItem];
+    }
+    iconurl=urls[currentItem];
+    address_site = sites[currentItem];
+    img_title = stranicas[currentItem];
+    //$("#img_loadmyslider").removeAttr("title").attr("title", img_title);
+    img_loadmyslider.setAttribute("title", img_title);
+    //$("#img_loadmyslider").removeAttr("src").attr("src", iconurl);
+    img_loadmyslider.setAttribute("src", iconurl);
+    //$("#address_imgmyslider").removeAttr("href").attr("href", address_site);
+    address_imgmyslider.setAttribute("href", address_site);
+    var el = document.getElementById("nameIcon");
+    el.innerHTML = img_title;
+}
+
+/*function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}*/
+
+function checkboxRandomPoryadokClick(){
+    console.log("checkboxRandomPoryadokClick()");
+    flagRandomPoryadok = checkboxRandomPoryadok.checked;
+    console.log("flagRandomPoryadok = " + flagRandomPoryadok);
+}
+
+function timerChange()
+{
+    //alert(this.value);
+    console.log("timerChange()");
+    timerValue = timer.value;
+    console.log("timer.value = " + timer.value);
+}
+
+function proverkaCurrentItem()
+{
+    console.log("proverkaCurrentItem");
+    if(currentItem < 0){
+        console.log("if(currentItem < 0");
+        currentItem = urls.length - 1;
+    }
+    
+    if (currentItem >= urls.length){
+        console.log("if(currentItem >= urls.length");
+        currentItem = 0;
+    }
+}
+
+function funcNext()
+{
+    console.log("funcNext");
+    currentItem++;
+    console.log("currentItem = " + currentItem);
+    proverkaCurrentItem();
+    //iconurl = urls[currentItem];
+    //address_site = sites[currentItem];
+    //$("#address_imgmyslider").removeAttr("href").attr("href", address_site);
+    //$("#img_loadmyslider").removeAttr("src").attr("src", iconurl);
+    change(currentItem);
+}
+
+function funcPrev()
+{
+    console.log("funcPrev");
+    currentItem--;
+    /*if(currentItem<0){
+        currentItem = urls.length - 1;
+    }*/
+    console.log("currentItem = " + currentItem);
+    proverkaCurrentItem();
+    //iconurl = urls[currentItem];
+    //address_site = sites[currentItem];
+    //$("#address_imgmyslider").removeAttr("href").attr("href", address_site);
+    //$("#img_loadmyslider").removeAttr("src").attr("src", iconurl);
+    change(currentItem);
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function myslider(in_currentItem){
+    console.log('myslider');
+
+    //let i = 0;
+    currentItem = in_currentItem;
+    
+    
+    if(isRun){
+        while (currentItem <= urls.length - 1){
+            if(isRun){
+            //????????????
+            /*if(currentItem==0){iconurl=urls[0]};
+            if(currentItem==1){iconurl=urls[1]};
+            if(currentItem==2){iconurl=urls[2]};
+            if(currentItem==3){iconurl=urls[3]};
+            if(currentItem==4){iconurl=urls[4]};
+            if(currentItem==5){iconurl=urls[5]};
+            //????????? ?????
+            if (currentItem==6){iconurl=urls[6]}
+            if (currentItem==7){iconurl=urls[7]}
+            if (currentItem==8){iconurl=urls[8]}
+            //??????????? ????
+            if (currentItem==9){iconurl=urls[9]}
+            if (currentItem==10){iconurl=urls[10]}
+            if (currentItem==11){iconurl=urls[11]}
+            if (currentItem==12){iconurl=urls[12]}
+            if (currentItem==13){iconurl=urls[13]}
+            if (currentItem==14){iconurl=urls[14]}
+            if (currentItem==15){iconurl=urls[15]}
+            if (currentItem==16){iconurl=urls[16]}
+            if (currentItem==17){iconurl=urls[17]}
+            if (currentItem==18){iconurl=urls[18]}
+            if (currentItem==19){iconurl=urls[19]}
+            //??????????
+            if (currentItem==20){iconurl=urls[20]}
+            if (currentItem==21){iconurl=urls[21]}
+            if (currentItem==22){iconurl=urls[22]}
+            if (currentItem==23){iconurl=urls[23]}
+            if (currentItem==24){iconurl=urls[24]}*/
+            
+            //iconurl=urls[currentItem];
+            //address_site = sites[currentItem];
+            //$("#img_loadmyslider").removeAttr("src").attr("src", iconurl);
+            //$("#address_imgmyslider").removeAttr("href").attr("href", address_site);
+            
+            /*if(checkboxRandomPoryadok.checked){
+                currentItem = getRandomInt(urls.length);
+            }*/
+            
+            change(currentItem);
+            console.log(iconurl);
+            console.log(address_site);
+            await sleep(timerValue);
+            if(isRun)
+                currentItem++;
+            console.log("next Item: " + currentItem)
+
+            if (currentItem === urls.length){currentItem = 0;}
+
+            }else{
+                break;
+            }
+        }
+    }
+}
+
+function vlevoClick(){
+    console.log("vlevoClick();");
+    funcPrev();
+}
+        
+function vpravoClick(){
+    console.log("vpravoClick();");
+    funcNext();
+}
+        
+function centerClick(){
+    console.log("centerClick();");
+    settings();
+}
+
+function settings(){
+    console.log("settings");
+}
+
+
+</script>
+</head>
+
+<body>  
+     <a id="address_imgmyslider" href="https://azbyka.ru/days/ikona-vifleemskaja" target="_blank">
+        <img id="img_loadmyslider" title="" src="https://azbyka.ru/days/storage/images/icons-of-our-lady/345/p1bt6mtb9g17vg1j9m1bs5md6fs63.jpg"/>
+     </a>
+     <span id="nameIcon">название</span>
+     <div class="vlevo" onclick="vlevoClick();"><span><</span></div>
+     <div class="vpravo" onclick="vpravoClick();"><span>></span></div>
+</body>
+<script>
+
+window.onload = function() {
+    // 
+    currentItem = arrNumber[0];
+    myslider(currentItem);
+};
+
+</script>
+
+</body>
+
+</html>
