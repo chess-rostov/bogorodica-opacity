@@ -172,7 +172,8 @@ document.addEventListener('keyup', function(event){
     }
 });
 
-var arrNumber = ["1", "5", "2", "7", "0", "4", "9", "3", "6", "8"];
+var       arrNumber = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+var arrNumberRandom = ["1", "5", "2", "7", "0", "4", "9", "3", "6", "8"];
 
 var stranicas = ["Целительница", 
 "Блаженное чрево", 
@@ -209,39 +210,20 @@ var urls = ["https://azbyka.ru/days/assets/img/icons/73/p1d5c5kmvt1ukl2osnab4cob
 
 function change(in_currentItem){
     currentItem = in_currentItem;
-    if(flagRandomPoryadok){
-        //currentItem = getRandomInt(urls.length - 1);
-        currentItem = arrNumber[currentItem];
-    }
-    iconurl=urls[currentItem];
-    address_site = sites[currentItem];
-    img_title = stranicas[currentItem];
-    //$("#img_loadmyslider").removeAttr("title").attr("title", img_title);
+    iconurl=urls[arrNumber[currentItem]];
+    address_site = sites[arrNumber[currentItem]];
+    img_title = stranicas[arrNumber[currentItem]];
     img_loadmyslider.setAttribute("title", img_title);
-    //$("#img_loadmyslider").removeAttr("src").attr("src", iconurl);
     img_loadmyslider.setAttribute("src", iconurl);
-    //$("#address_imgmyslider").removeAttr("href").attr("href", address_site);
     address_imgmyslider.setAttribute("href", address_site);
     var el = document.getElementById("nameIcon");
     el.innerHTML = img_title;
 }
 
-/*function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-}*/
-
 function checkboxRandomPoryadokClick(){
     console.log("checkboxRandomPoryadokClick()");
     flagRandomPoryadok = checkboxRandomPoryadok.checked;
     console.log("flagRandomPoryadok = " + flagRandomPoryadok);
-}
-
-function timerChange()
-{
-    //alert(this.value);
-    console.log("timerChange()");
-    timerValue = timer.value;
-    console.log("timer.value = " + timer.value);
 }
 
 function proverkaCurrentItem()
@@ -264,10 +246,6 @@ function funcNext()
     currentItem++;
     console.log("currentItem = " + currentItem);
     proverkaCurrentItem();
-    //iconurl = urls[currentItem];
-    //address_site = sites[currentItem];
-    //$("#address_imgmyslider").removeAttr("href").attr("href", address_site);
-    //$("#img_loadmyslider").removeAttr("src").attr("src", iconurl);
     change(currentItem);
 }
 
@@ -275,15 +253,8 @@ function funcPrev()
 {
     console.log("funcPrev");
     currentItem--;
-    /*if(currentItem<0){
-        currentItem = urls.length - 1;
-    }*/
     console.log("currentItem = " + currentItem);
     proverkaCurrentItem();
-    //iconurl = urls[currentItem];
-    //address_site = sites[currentItem];
-    //$("#address_imgmyslider").removeAttr("href").attr("href", address_site);
-    //$("#img_loadmyslider").removeAttr("src").attr("src", iconurl);
     change(currentItem);
 }
 
@@ -291,12 +262,8 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function myslider(in_currentItem){
+async function myslider(){
     console.log('myslider');
-
-    //let i = 0;
-    currentItem = in_currentItem;
-    
     
     if(isRun){
         while (currentItem <= urls.length - 1){
@@ -340,18 +307,16 @@ async function myslider(in_currentItem){
                 currentItem = getRandomInt(urls.length);
             }*/
             
-            change(currentItem);
+            
+            //change(currentItem);
+            funcNext();
             console.log(iconurl);
             console.log(address_site);
+            console.log(img_title);
             await sleep(timerValue);
-            if(isRun)
-                currentItem++;
+
             console.log("next Item: " + currentItem)
 
-            if (currentItem === urls.length){currentItem = 0;}
-
-            }else{
-                break;
             }
         }
     }
@@ -392,8 +357,8 @@ function settings(){
 
 window.onload = function() {
     // 
-    currentItem = arrNumber[0];
-    myslider(currentItem);
+    currentItem = -1;
+    myslider();
 };
 
 </script>
