@@ -56,20 +56,18 @@ a ~ div.vlevo{
 }
 
 @keyframes vlevo-vpravo-hover {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 0.3;
-    }
+    0% {opacity: 0.3;}
+    50% {opacity: 0.8;}
+    100% {opacity: 1;}
 }
 
 a~div.vlevo:hover,
 a~div.vpravo:hover{
-    background-color: black;
-    opacity: 0.3;
+    /*background-color: black;*/
+    /*opacity: 1;*/
     text-align: center;
     animation: vlevo-vpravo-hover 1s linear;
+    -webkit-animation-fill-mode: forwards;
 }
       
 a ~ div.vpravo {
@@ -113,9 +111,10 @@ img ~ div.center {
     100% {opacity: 0; }
 }
 
-img {
+/*img {
     animation: change-opacity 5s linear infinite;
-}
+    -webkit-animation-fill-mode: forwards;
+}*/
   
 </style>
 <!--<script type="text/javascript" defer="" src="https://yandex.st/jquery/1.9.1/jquery.min.js"></script> -->
@@ -126,7 +125,7 @@ var iconurl = '';
 var address_site = '';
 var img_title = '';
 var currentItem = 0;
-var timerValue = 4900;
+var timerValue = 5000;
 var flagSkrytb = false;
 var isClicked = false;
 var flagRandomPoryadok = true;
@@ -366,3 +365,4 @@ window.onload = function() {
 </body>
 
 </html>
+
